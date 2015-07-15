@@ -8,7 +8,7 @@ deploy:
   provider: releases
   skip_cleanup: true
   api_key:
-    secure: VmBzdZBq5hzaFVDngDr0bH/ogZ6s0vhZpaVz0i7QmhipjC66zOfBu8BnyTgNuLw3p/Wo9O3R6iTB6phe1uuyU0F94WQfsAb4Tjuzt/7j/m7gc8+QrWaqyi8Up6XSmV2XhjRwDNhrP95CEgIUy8DFLAtlwNXn42/NDwiQ7O9xUpE=
+    secure: EHsJ2OyvOYCiMVremifvnuGbGethrD87a9vrRTxWoz2GiDAVajb5LZmsKyKZVvmaiLOhH+DJQ8tsPTnEQwI6t0ti1fJN5oeaYCOlVq4TkLMQXOi3zOmNnMPjO979ayrs7DMuXFMHTB0HhwT7JRgVW3UpYBlWrbT7O5lrAozE8Us=
   file: 'CHTN-Core-Vocabulary.*'
   file_glob: true
   on:
