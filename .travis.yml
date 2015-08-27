@@ -1,0 +1,16 @@
+language: node_js
+node_js:
+- '0.10'
+before_install:
+- npm install https://github.com/CooperativeHumanTissueNetwork/Vocabulary-Tooling/tarball/v1.1.1
+script: ./node_modules/chtn-vocabulary-tools/node_modules/coffee-script/bin/coffee node_modules/chtn-vocabulary-tools/index.litcoffee -f CHTN-Core-Vocabulary.tsv
+deploy:
+  provider: releases
+  skip_cleanup: true
+  api_key:
+    secure: EHsJ2OyvOYCiMVremifvnuGbGethrD87a9vrRTxWoz2GiDAVajb5LZmsKyKZVvmaiLOhH+DJQ8tsPTnEQwI6t0ti1fJN5oeaYCOlVq4TkLMQXOi3zOmNnMPjO979ayrs7DMuXFMHTB0HhwT7JRgVW3UpYBlWrbT7O5lrAozE8Us=
+  file: 'CHTN-Core-Vocabulary.*'
+  file_glob: true
+  on:
+    repo: CooperativeHumanTissueNetwork/Vocabulary
+    tags: true
