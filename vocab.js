@@ -12,30 +12,79 @@
 
     let v = window.v = {}
 
-    class vocabularySelect {
-        constructor(selector, dimension, group) {
+    class VocabularySelect {
+        constructor (selector, dimension, group) {
             this.$el = $(selector);
             this.d = dimension;
             this.g = group;
             this.loadOptions();
         }
 
-        selectItemMap(item) {
+        selectItemMap (item) {
             return {
                 id: item.key,
                 text: item.key
             };
         }
 
-        loadOptions() {
-            this.$el.select2({
+        loadOptions () {
+            this.$el.val(this.val).select2({
                 data: this.g.all().map(this.selectItemMap)
             })
         }
 
-        refresh() {
+        refresh () {
+            this.val = this.$el.val();
+            this.d.filterExact(this.val);
             this.$el.empty();
             this.loadOptions();
+        }
+
+        addListener (evt, listener) {
+            this.$el.on(evt, listener)
+        }
+
+        get $() {
+            return this.$el;
+        }
+    }
+
+    class VocabularyTable {
+        constructor (selector, dimension){
+            this.$el = $(selector);
+            this.d = dimension;
+            this.refresh();
+        }
+
+        refresh () {
+            this.$el.DataTable({
+                data: this.d.top(Infinity),
+                columns: displayFields.map(function (field) {
+                    return {
+                        data: field,
+                        title: field
+                    }
+                }),
+                destroy: true
+            });
+        }
+
+        addListener () {}
+    }
+
+    class VocabularyFilterUpdater {
+        constructor (elements) {
+            let that = this;
+            this.elements = elements;
+            this.elements.forEach(function (element) {
+                element.addListener("change", that.refresh.bind(that));
+            });
+        }
+
+        refresh () {
+            this.elements.forEach(function (element) {
+                element.refresh();
+            });
         }
     }
 
@@ -63,26 +112,22 @@
             groupByDiagnosisModifier: v.d.byDiagnosisModifier.group(),
         };
 
-        $(".vocab-table").DataTable({
-            data: v.d.byCategory.top(Infinity),
-            columns: displayFields.map(function (field) {
-                return {
-                    data: field,
-                    title: field
-                }
-            })
-        });
+        let vocabularyTable = new VocabularyTable(".vocab-table", v.d.byCategory);
+        let categorySelect = new VocabularySelect("#category", v.d.byCategory, v.g.groupByCategory);
+        let anatomicSiteSelect = new VocabularySelect("#anatomicSite", v.d.byAnatomicSite, v.g.groupByAnatomicSite);
+        let subsiteSelect = new VocabularySelect("#subsite", v.d.bySubsite, v.g.groupBySubsite);
+        let diagnosisSelect = new VocabularySelect("#diagnosis", v.d.byDiagnosis, v.g.groupByDiagnosis);
+        let diagnosisModifierSelect = new VocabularySelect("#diagnosisModifier", v.d.byDiagnosisModifier, v.g.groupByDiagnosisModifier);
 
-        v.initalizeSelects();
+        v.vfu = new VocabularyFilterUpdater([
+            vocabularyTable,
+            categorySelect,
+            anatomicSiteSelect,
+            subsiteSelect,
+            diagnosisSelect,
+            diagnosisModifierSelect
+        ]);
 
     });
-
-    v.initalizeSelects = function () {
-        let categorySelect = new vocabularySelect("#category", v.d.byCategory, v.g.groupByCategory);
-        let anatomicSiteSelect = new vocabularySelect("#anatomicSite", v.d.byAnatomicSite, v.g.groupByAnatomicSite);
-        let subsiteSelect = new vocabularySelect("#subsite", v.d.bySubsite, v.g.groupBySubsite);
-        let diagnosisSelect = new vocabularySelect("#diagnosis", v.d.byDiagnosis, v.g.groupByDiagnosis);
-        let diagnosisModifierSelect = new vocabularySelect("#diagnosisModifier", v.d.byDiagnosisModifier, v.g.groupByDiagnosisModifier);
-    };
 
 })();
