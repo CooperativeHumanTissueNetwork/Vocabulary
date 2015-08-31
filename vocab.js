@@ -12,6 +12,35 @@
 
     let v = window.v = {}
 
+    class vocabularySelect {
+        constructor(selector, dimension, group) {
+            this.$el = $(selector);
+            this.d = dimension;
+            this.g = group;
+            this.loadOptions();
+        }
+
+        selectItemMap(item) {
+            return {
+                id: item.key,
+                text: item.key
+            };
+        }
+
+        loadOptions() {
+            this.$el.select2({
+                data: this.g.all().map(this.selectItemMap)
+            })
+        }
+
+        refresh() {
+            this.$el.empty();
+            this.loadOptions();
+        }
+    }
+
+
+    // Load the Datas
     d3.json(vocabUrl, function (err, data) {
 
         v.raw = data;
@@ -44,6 +73,16 @@
             })
         });
 
+        v.initalizeSelects();
+
     });
+
+    v.initalizeSelects = function () {
+        let categorySelect = new vocabularySelect("#category", v.d.byCategory, v.g.groupByCategory);
+        let anatomicSiteSelect = new vocabularySelect("#anatomicSite", v.d.byAnatomicSite, v.g.groupByAnatomicSite);
+        let subsiteSelect = new vocabularySelect("#subsite", v.d.bySubsite, v.g.groupBySubsite);
+        let diagnosisSelect = new vocabularySelect("#diagnosis", v.d.byDiagnosis, v.g.groupByDiagnosis);
+        let diagnosisModifierSelect = new vocabularySelect("#diagnosisModifier", v.d.byDiagnosisModifier, v.g.groupByDiagnosisModifier);
+    };
 
 })();

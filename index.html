@@ -5,12 +5,35 @@
     <title>CHTN Vocabulary</title>
     <link type="text/css" rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="bower_components/datatables/media/css/dataTables.bootstrap.css"  media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="bower_components/select2/dist/css/select2.css"  media="screen,projection"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body>
     <div class="container">
         <h1>CHTN Vocabulary</h1>
         <h2>Selectors</h2>
+        <div class="row">
+            <div class="col-sm-2">
+                <label for="category">Category</label>
+                <select class="form-control" name="category" id="category"></select>
+            </div>
+            <div class="col-sm-2">
+                <label for="anatomicSite">Anatomic Site</label>
+                <select class="form-control" name="anatomicSite" id="anatomicSite"></select>
+            </div>
+            <div class="col-sm-2">
+                <label for="subsite">Subsite</label>
+                <select class="form-control" name="subsite" id="subsite"></select>
+            </div>
+            <div class="col-sm-2">
+                <label for="diagnosis">Diagnosis</label>
+                <select class="form-control" name="diagnosis" id="diagnosis"></select>
+            </div>
+            <div class="col-sm-2">
+                <label for="diagnosisModifier">Diagnosis Modifier</label>
+                <select class="form-control" name="diagnosisModifier" id="diagnosisModifier"></select>
+            </div>
+        </div>
         <h2>Matching Rows</h2>
         <table class="vocab-table table"></table>
     </div>
@@ -23,6 +46,7 @@
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/datatables/media/js/jquery.dataTables.js"></script>
     <script src="bower_components/datatables/media/js/dataTables.bootstrap.js"></script>
+    <script src="bower_components/select2/dist/js/select2.js"></script>
     <script src="vocab.js"></script>
 </body>
 </html>
