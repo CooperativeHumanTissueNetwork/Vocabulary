@@ -52,10 +52,34 @@
         //};
     }]);
 
-    app.controller("VocabularFilterController", ["$scope", "vcf", function ($scope, vcf){
+    /* Returns the filtered set of all data as a promise. */
+    app.service("vfp", ["$q", "vcf", function ($q, vcf) {
+        let d;
+        return function () {
+            if (d) {
+                return $q.when(d.d.byCategory.top(Infinity));
+            } else {
+                return vcf.then(function (data) {
+                    d = data;
+                    return data;
+                }).then(function (data) {
+                    return data.d.byCategory.top(Infinity);
+                });
+            }
+        };
+    }]);
+
+    app.controller("VocabularFilterController", ["$scope", "vcf", "DTOptionsBuilder", "DTColumnBuilder", "vfp", function ($scope, vcf, DTOptionsBuilder, DTColumnBuilder, vfp){
         vcf.then(function (data) {
             angular.extend($scope, data);
+            return data;
         });
+        $scope.tableInstance = {}
+        $scope.tableOptions = DTOptionsBuilder.fromFnPromise(vfp).withPaginationType('full_numbers');
+        $scope.columns = displayFields.map(function (field) {
+            return DTColumnBuilder.newColumn(field).withTitle(field);
+        });
+
     }]);
 
     app.directive("chtnvs", function () {
