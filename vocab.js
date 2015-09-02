@@ -80,6 +80,17 @@
             return DTColumnBuilder.newColumn(field).withTitle(field);
         });
 
+        $scope.$on("chtnvs.changed", function (evt) {
+            if (evt.targetScope.data.item) {
+                evt.targetScope.dimension.filterExact(evt.targetScope.data.item);
+            } else {
+                evt.targetScope.dimension.filterAll();
+            }
+
+            $scope.tableInstance.changeData(vfp);
+            console.log("Changed. Arguments:", arguments);
+        });
+
     }]);
 
     app.directive("chtnvs", function () {
@@ -89,6 +100,9 @@
                 dimension: "=dimension",
                 group: "=group",
                 label: "@label"
+            },
+            link: function (scope) {
+                scope.data = {};
             }
         };
     });

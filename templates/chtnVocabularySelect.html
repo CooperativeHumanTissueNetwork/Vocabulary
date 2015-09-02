@@ -1,6 +1,6 @@
-<label for="label">{{label}}</label>
-<ui-select ng-model="label">
-    <ui-select-match placeholder="{{label}}">{{$select.selected.key}}</ui-select-match>
+<label for="data.item">{{label}}</label>
+<ui-select ng-model="data.item" ng-change="$emit('chtnvs.changed')">
+    <ui-select-match placeholder="{{label}}" allow-clear=true>{{$select.selected.key}}</ui-select-match>
     <ui-select-choices repeat="item.key as item in group.all() | filter: $select.search">
         <div ng-bind-html="item.key"></div>
     </ui-select-choices>
