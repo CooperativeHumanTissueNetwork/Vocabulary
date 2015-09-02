@@ -102,6 +102,9 @@
                 label: "@label"
             },
             link: function (scope) {
+                scope.notEmpty = function (value) {
+                    return value.value !== 0;
+                }
                 scope.data = {};
             }
         };
