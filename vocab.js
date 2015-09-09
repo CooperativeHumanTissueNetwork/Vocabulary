@@ -12,7 +12,25 @@
 
     let v = window.v = {}
 
-    let app = angular.module("vocabularyFilter", ["datatables", "ngSanitize", "ui.select"]);
+    let app = angular.module("vocabularyFilter", ["datatables", "ngSanitize", "ui.select", "ui.router"]);
+
+    app.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
+        $urlRouterProvider.otherwise("/");
+        $stateProvider
+            .state("home", {
+                url: "/",
+                templateUrl: "vocabulary-home.html"
+            })
+            .state("filters", {
+                url: "/filters",
+                controller: "VocabularFilterController as vcf",
+                templateUrl: "vocabulary-filter.html"
+            })
+            .state("sql", {
+                url: "/sql",
+                templateUrl: "vocabulary-sql.html"
+            });
+    }]);
 
     app.service("vcf", ["$q", "$window", function ($q, $window) {
         let d3 = $window.d3;
