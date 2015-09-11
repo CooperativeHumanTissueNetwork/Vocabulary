@@ -104,9 +104,8 @@
             } else {
                 evt.targetScope.dimension.filterAll();
             }
-
+            evt.stopPropagation();
             $scope.tableInstance.changeData(vfp);
-            console.log("Changed. Arguments:", arguments);
         });
 
     }]);
