@@ -3,9 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>CHTN Vocabulary</title>
+
+    <!-- CSS -->
     <link type="text/css" rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css"  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="bower_components/datatables/media/css/dataTables.bootstrap.css"  media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="bower_components/ui-select/dist/select.css"  media="screen,projection"/>
+    <link rel="stylesheet" type="text/css" href="bower_components/codemirror/lib/codemirror.css"  media="screen,projection">
+    <link rel="stylesheet" type="text/css" href="bower_components/codemirror/theme/monokai.css"  media="screen,projection">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head>
 <body ng-app="vocabularyFilter">
@@ -34,19 +39,26 @@
     </div>
 
 
-    <!--Scripts-->
+    <!--Library Scripts-->
     <script src="bower_components/d3/d3.js"></script>
     <script src="bower_components/crossfilter/crossfilter.js"></script>
     <script src="bower_components/dcjs/dc.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/datatables/media/js/jquery.dataTables.js"></script>
     <script src="bower_components/datatables/media/js/dataTables.bootstrap.js"></script>
+    <script src="bower_components/sql.js/js/sql.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/ui-select/dist/select.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-datatables/dist/angular-datatables.js"></script>
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script type="text/javascript" src="bower_components/codemirror/lib/codemirror.js"></script>
+    <script type="text/javascript" src="bower_components/codemirror/mode/sql/sql.js"></script>
+    <script type="text/javascript" src="bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
+
+    <!-- Our Script -->
     <script src="vocab.js"></script>
+
 
     <!--Templates-->
     <script type="text/ng-template" id="vocabulary-home.html">
@@ -84,6 +96,10 @@
 
     <script type="text/ng-template" id="vocabulary-sql.html">
         <h2>SQL Demo</h2>
+        <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="sql.query"></ui-codemirror>
+        <button class="btn btn-default" ng-click="executeQuery(sql.query)">Execute Query</button>
+        <pre>{{sql.results}}</pre>
     </script>
+    
 </body>
 </html>

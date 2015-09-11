@@ -12,7 +12,12 @@
 
     let v = window.v = {}
 
-    let app = angular.module("vocabularyFilter", ["datatables", "ngSanitize", "ui.select", "ui.router"]);
+    let app = angular.module("vocabularyFilter", [
+        "datatables",
+        "ngSanitize",
+        "ui.select",
+        "ui.router",
+        "ui.codemirror"]);
 
     app.config(["$stateProvider", "$urlRouterProvider", function ($stateProvider, $urlRouterProvider) {
         $urlRouterProvider.otherwise("/");
@@ -28,7 +33,8 @@
             })
             .state("sql", {
                 url: "/sql",
-                templateUrl: "vocabulary-sql.html"
+                templateUrl: "vocabulary-sql.html",
+                controller: "VocabularySQLController"
             });
     }]);
 
@@ -87,6 +93,19 @@
         };
     }]);
 
+    app.service("sql", ["$window", function ($window) {
+        return $window.SQL;
+    }]);
+
+    app.service("vsql", ["sql", "$http", function (sql, $http) {
+        let db = new sql.Database();
+        $http.get("CHTN-Core-Vocabulary.sql").then(function (results) {
+            // db.exec(results.data);
+            console.log("Skipping data load for now.");
+        });
+        return db;
+    }]);
+
     app.controller("VocabularFilterController", ["$scope", "vcf", "DTOptionsBuilder", "DTColumnBuilder", "vfp", function ($scope, vcf, DTOptionsBuilder, DTColumnBuilder, vfp){
         vcf.then(function (data) {
             angular.extend($scope, data);
@@ -108,6 +127,17 @@
             $scope.tableInstance.changeData(vfp);
         });
 
+    }]);
+
+    app.controller("VocabularySQLController", ["$scope", "vsql", function ($scope, vsql) {
+        $scope.editorOptions = {
+            mode: "text/x-mysql",
+            lineNumbers: true,
+        }
+        $scope.executeQuery = function (query) {
+            console.log("Executing Query:", query);
+            $scope.sql.results = vsql.exec(query)
+        }
     }]);
 
     app.directive("chtnvs", function () {
