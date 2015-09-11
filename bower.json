@@ -24,6 +24,7 @@
     "datatables": "~1.10.8",
     "dcjs": "dc.js#~2.0.0-beta.18",
     "select2": "~4.0.0",
-    "ui-select": "angular-ui-select#~0.12.1"
+    "ui-select": "angular-ui-select#~0.12.1",
+    "bootstrap": "~3.3.5"
   }
 }
