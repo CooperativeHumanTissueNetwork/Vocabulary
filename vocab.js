@@ -28,7 +28,7 @@
             })
             .state("filters", {
                 url: "/filters",
-                controller: "VocabularFilterController as vcf",
+                controller: "VocabularyFilterController as vcf",
                 templateUrl: "vocabulary-filter.html"
             })
             .state("sql", {
@@ -106,7 +106,7 @@
         return db;
     }]);
 
-    app.controller("VocabularFilterController", ["$scope", "vcf", "DTOptionsBuilder", "DTColumnBuilder", "vfp", function ($scope, vcf, DTOptionsBuilder, DTColumnBuilder, vfp){
+    app.controller("VocabularyFilterController", ["$scope", "vcf", "DTOptionsBuilder", "DTColumnBuilder", "vfp", function ($scope, vcf, DTOptionsBuilder, DTColumnBuilder, vfp){
         vcf.then(function (data) {
             angular.extend($scope, data);
             return data;
