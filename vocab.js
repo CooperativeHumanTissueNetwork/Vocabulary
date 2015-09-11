@@ -137,6 +137,12 @@
         $scope.executeQuery = function (query) {
             console.log("Executing Query:", query);
             $scope.sql.results = vsql.exec(query)
+            $scope.updateDatabaseInfo();
+        }
+
+        $scope.updateDatabaseInfo = function () {
+            $scope.db = $scope.db || {};
+            $scope.db.tables = vsql.exec("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")[0].values.map(function (value) { return value[0];});
         }
     }]);
 

@@ -1,4 +1,19 @@
 <h2>SQL Demo</h2>
-<ui-codemirror ui-codemirror-opts="editorOptions" ng-model="sql.query"></ui-codemirror>
-<button class="btn btn-default" ng-click="executeQuery(sql.query)">Execute Query</button>
+<div class="row">
+    <div class="col-sm-9">
+        <h4>Query Editor</h4>
+        <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="sql.query"></ui-codemirror>
+    </div>
+    <div class="col-sm-3">
+        <h4>Database Info</h4>
+        <ul class="list-group">
+            <li class="list-group-item"><b>Tables</b></li>
+            <li class="list-group-item" ng-repeat="table in db.tables">{{table}}</li>
+        </ul>
+    </div>
+</div>
+<div class="sql-controls">
+   <button class="btn btn-primary" ng-click="executeQuery(sql.query)">Execute Query</button> 
+</div>
+<h4>Results</h4>
 <pre>{{sql.results}}</pre>
