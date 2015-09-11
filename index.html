@@ -16,25 +16,7 @@
 <body ng-app="vocabularyFilter">
     <div class="container">
         <h1>CHTN Vocabulary</h1>
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a ui-sref="home" class="navbar-brand"><span class="glyphicon glyphicon-home"></span></a>
-                </div>
-                <div class="collapse navbar-collapse" id="navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li ui-sref-active="active"><a ui-sref="filters">Vocabulary Filters</a></li>
-                        <li ui-sref-active="active"><a ui-sref="sql">Vocabulary SQL</a></li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
+        <div ng-include="'templates/vocabulary-navigation.html'"></div>
         <ui-view></ui-view>
     </div>
 
@@ -58,48 +40,6 @@
 
     <!-- Our Script -->
     <script src="vocab.js"></script>
-
-
-    <!--Templates-->
-    <script type="text/ng-template" id="vocabulary-home.html">
-        <div class="jumbotron">
-            <h1>CHTN Vocabulary Demos</h1>
-            <p>Select below or above to get started.</p>
-            <p><a class="btn btn-primary btn-lg" ui-sref="filters" role="button">Filters</a></p>
-        </div>
-    </script>
-
-    <script type="text/ng-template" id="vocabulary-filter.html">
-        <h2>Selectors</h2>
-        <div class="row">
-            <div class="col-sm-4">
-                <chtnvs label="Category" group="g.groupByCategory" dimension="d.byCategory"></chtnvs>
-            </div>
-            <div class="col-sm-4">
-                <chtnvs label="Anatomic Site" group="g.groupByAnatomicSite" dimension="d.byAnatomicSite"></chtnvs>
-            </div>
-            <div class="col-sm-4">
-                <chtnvs label="Subsite" group="g.groupBySubsite" dimension="d.bySubsite"></chtnvs>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <chtnvs label="Diagnosis" group="g.groupByDiagnosis" dimension="d.byDiagnosis"></chtnvs>
-            </div>
-            <div class="col-sm-6">
-                <chtnvs label="Diagnosis Modifier" group="g.groupByDiagnosisModifier" dimension="d.byDiagnosisModifier"></chtnvs>
-            </div>
-        </div>
-        <h2>Matching Rows</h2>
-        <table datatable="" dt-options="tableOptions" dt-columns="columns" dt-instance="tableInstance" class="table table-bordered table-condensed table-hover"></table>
-    </script>
-
-    <script type="text/ng-template" id="vocabulary-sql.html">
-        <h2>SQL Demo</h2>
-        <ui-codemirror ui-codemirror-opts="editorOptions" ng-model="sql.query"></ui-codemirror>
-        <button class="btn btn-default" ng-click="executeQuery(sql.query)">Execute Query</button>
-        <pre>{{sql.results}}</pre>
-    </script>
     
 </body>
 </html>

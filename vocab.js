@@ -24,16 +24,16 @@
         $stateProvider
             .state("home", {
                 url: "/",
-                templateUrl: "vocabulary-home.html"
+                templateUrl: "templates/vocabulary-home.html"
             })
             .state("filters", {
                 url: "/filters",
                 controller: "VocabularyFilterController as vcf",
-                templateUrl: "vocabulary-filter.html"
+                templateUrl: "templates/vocabulary-filter.html"
             })
             .state("sql", {
                 url: "/sql",
-                templateUrl: "vocabulary-sql.html",
+                templateUrl: "templates/vocabulary-sql.html",
                 controller: "VocabularySQLController"
             });
     }]);
@@ -142,7 +142,7 @@
 
     app.directive("chtnvs", function () {
         return {
-            templateUrl: "templates/chtnVocabularySelect.html",
+            templateUrl: "templates/chtn-vocabulary-select.html",
             scope: {
                 dimension: "=dimension",
                 group: "=group",

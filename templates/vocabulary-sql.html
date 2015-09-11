@@ -1,0 +1,4 @@
+<h2>SQL Demo</h2>
+<ui-codemirror ui-codemirror-opts="editorOptions" ng-model="sql.query"></ui-codemirror>
+<button class="btn btn-default" ng-click="executeQuery(sql.query)">Execute Query</button>
+<pre>{{sql.results}}</pre>
