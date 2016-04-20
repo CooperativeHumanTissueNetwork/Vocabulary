@@ -38,42 +38,60 @@
             });
     }]);
 
-    app.service("vcf", ["$q", "$window", function ($q, $window) {
+    /**
+     * Promises the JSON version of the CHTN Vocabulary
+     */
+    app.service("vjson", ["$q", "$http", function ($q, $http) {
+        let cache = {};
+        return function getvjson(version) {
+            version = version || "1.1.0";
+            if (cache[version]) {
+                return $q.when(cache[version]);
+            } else {
+                // let url = "https://s3.amazonaws.com/chtn-files/v"+version+"/CHTN-Core-Vocabulary.json"
+                let url = vocabUrl;
+                return $http.get(url).then(function (response) {
+                    cache[version] = response.data
+                    return response.data;
+                });
+            }
+        }
+    }]);
+
+    app.service("vcf", ["$q", "$window", "vjson", function ($q, $window, vjson) {
         let d3 = $window.d3;
-        //return function () {
-            let defer = $q.defer();
-            // Load the Datas
-            d3.json(vocabUrl, function (err, data) {
-                if (err) {
-                    defer.fail(err);
-                } else {
-                    v.raw = data;
-                    // Setup Crossfilters
-                    v.cf = crossfilter(data);
-                    v.all = v.cf.groupAll();
-                    v.d = {
-                        byCategory: v.cf.dimension(function (d) { return d["Category"]; }),
-                        byAnatomicSite: v.cf.dimension(function (d) { return d["Anatomic Site"]; }),
-                        bySubsite: v.cf.dimension(function (d) { return d["Subsite"]; }),
-                        byDiagnosis: v.cf.dimension(function (d) { return d["Diagnosis"]; }),
-                        byDiagnosisModifier: v.cf.dimension(function (d) { return d["Diagnosis Modifier"]; }),
-                    };
-                    v.g = {
-                        groupByCategory: v.d.byCategory.group(),
-                        groupByAnatomicSite: v.d.byAnatomicSite.group(),
-                        groupBySubsite: v.d.bySubsite.group(),
-                        groupByDiagnosis: v.d.byDiagnosis.group(),
-                        groupByDiagnosisModifier: v.d.byDiagnosisModifier.group(),
-                    };
-                    defer.resolve({
-                        cf: v.cf,
-                        d: v.d,
-                        g: v.g
-                    });
-                }
-            });
-            return defer.promise;
-        //};
+        let cfCache;
+        return vjson().then(function (data) {
+            if (cfCache) {
+                return cfCache
+            } else {
+                v.raw = data;
+                // Setup Crossfilters
+                v.cf = crossfilter(data);
+                v.all = v.cf.groupAll();
+                v.d = {
+                    byCategory: v.cf.dimension(function (d) { return d["Category"]; }),
+                    byAnatomicSite: v.cf.dimension(function (d) { return d["Anatomic Site"]; }),
+                    bySubsite: v.cf.dimension(function (d) { return d["Subsite"]; }),
+                    byDiagnosis: v.cf.dimension(function (d) { return d["Diagnosis"]; }),
+                    byDiagnosisModifier: v.cf.dimension(function (d) { return d["Diagnosis Modifier"]; }),
+                };
+                v.g = {
+                    groupByCategory: v.d.byCategory.group(),
+                    groupByAnatomicSite: v.d.byAnatomicSite.group(),
+                    groupBySubsite: v.d.bySubsite.group(),
+                    groupByDiagnosis: v.d.byDiagnosis.group(),
+                    groupByDiagnosisModifier: v.d.byDiagnosisModifier.group(),
+                };
+                cfCache = {
+                    cf: v.cf,
+                    d: v.d,
+                    g: v.g
+                };
+                return cfCache;
+            }
+
+        })
     }]);
 
     /* Returns the filtered set of all data as a promise. */
