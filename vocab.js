@@ -142,9 +142,11 @@
             return vjson().then(function (v) {
                 n = n || 100;
                 for (let i = 0; i<n; i++) {
+                    let vocabularyItem = chance.pickone(v)
                     rdb.insert({
                         description: chance.sentence({words: 6}),
-                        vocabularyRequirement: chance.pickone(v)
+                        investigator: chance.name(),
+                        annotation: vocabularyItem
                     })
                 }
                 return rdb;
@@ -158,9 +160,7 @@
     }]);
 
     app.service("rfp", ["rdb", "$q", function (rdb, $q) {
-        let i = 1;
         return function () {
-            console.log("rfp call ",i++);
             return $q.when(rdb.find());
         }
     }]);
@@ -219,32 +219,81 @@
     }]);
 
     app.controller("RequestController", ["$scope", "rdb", "rfp", "DTOptionsBuilder", "DTColumnBuilder", function ($scope, rdb, rfp, DTOptionsBuilder, DTColumnBuilder) {
-        $scope.message = "Message";
         $scope.tableInstance = {}
         $scope.tableOptions = DTOptionsBuilder.fromFnPromise(rfp).withPaginationType('full_numbers');
         $scope.columns = [
-            DTColumnBuilder.newColumn("description").withTitle("Description")
+            DTColumnBuilder.newColumn("investigator").withTitle("Investigator"),
+            DTColumnBuilder.newColumn("description").withTitle("Description"),
+            DTColumnBuilder.newColumn("annotation.Category").withTitle("Category")
         ]
         rdb.generateRequests(10).then(function() {
             $scope.tableInstance.changeData(rfp);
         });
+
+        $scope.addRequest = addRequest;
+
+        function addRequest(request) {
+            rdb.insert(request);
+            $scope.tableInstance.changeData(rfp);
+        }
+
+        function clearNewRequest() {
+            $scope.newRequest = {};
+        }
     }]);
 
     app.directive("chtnvs", function () {
         return {
             templateUrl: "templates/chtn-vocabulary-select.html",
+            require: "ngModel",
             scope: {
                 dimension: "=dimension",
                 group: "=group",
                 label: "@label"
             },
-            link: function (scope) {
+            link: function (scope, element, attrs, ngModel) {
                 scope.notEmpty = function (value) {
                     return value.value !== 0;
                 }
                 scope.data = {};
+                scope.$watch("data.item", function (newValue) {
+                    if(ngModel.$viewValue !== newValue) {
+                        ngModel.$setViewValue(newValue);
+                    }
+                })
             }
         };
     });
+
+    app.directive("chtnvb", ["vcf", function (vcf) {
+        return {
+            templateUrl: "templates/chtn-vocabulary-builder.html",
+            require: "ngModel",
+            scope: {},
+            link: function (scope, element, attrs, ngModel) {
+                ngModel.$render = function () { console.log("chtnvb ngModel Rendered")};
+
+                scope.value={}
+
+                vcf.then(function (data) {
+                    angular.extend(scope, data);
+                });
+
+                scope.$on("chtnvs.changed", function (evt) {
+                    if (evt.targetScope.data.item) {
+                        evt.targetScope.dimension.filterExact(evt.targetScope.data.item);
+                    } else {
+                        evt.targetScope.dimension.filterAll();
+                    }
+                    scope.$evalAsync(updateModel);
+                    evt.stopPropagation();
+                });
+
+                function updateModel() {
+                    ngModel.$setViewValue(scope.value);
+                }
+            }
+        };
+    }]);
 
 })();
