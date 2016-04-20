@@ -35,6 +35,11 @@
                 url: "/sql",
                 templateUrl: "templates/vocabulary-sql.html",
                 controller: "VocabularySQLController"
+            })
+            .state("requests", {
+                url: "/requests",
+                templateUrl: "templates/requests.html",
+                controller: "RequestController"
             });
     }]);
 
@@ -58,6 +63,9 @@
         }
     }]);
 
+    /**
+     * Promises a set of cross-filter objects for the CHTN Vocabulary
+     */
     app.service("vcf", ["$q", "$window", "vjson", function ($q, $window, vjson) {
         let d3 = $window.d3;
         let cfCache;
@@ -94,7 +102,9 @@
         })
     }]);
 
-    /* Returns the filtered set of all data as a promise. */
+    /**
+     * Promises the cross-filtered set of the vocabulary.
+     */
     app.service("vfp", ["$q", "vcf", function ($q, vcf) {
         let d;
         return function () {
@@ -111,6 +121,50 @@
         };
     }]);
 
+    app.service("db", ["$window", function ($window) {
+        return new $window.loki('db');
+    }]);
+
+    app.service("vloki", ["db", "vjson", "$window", function (db, vjson, $window) {
+        let vocabulary = db.addCollection("vocabulary");
+        vjson().then(function (data) {
+            vocabulary.insert(data);
+            $window.v = vocabulary;
+        })
+        return vocabulary;
+    }]);
+
+    app.service("rdb", ["db", "vjson", "$window", function (db, vjson, $window) {
+        let rdb = db.addCollection("requests");
+
+        let chance = $window.chance;
+        let generateRequests = function generateRequests(n) {
+            return vjson().then(function (v) {
+                n = n || 100;
+                for (let i = 0; i<n; i++) {
+                    rdb.insert({
+                        description: chance.sentence({words: 6}),
+                        vocabularyRequirement: chance.pickone(v)
+                    })
+                }
+                return rdb;
+            })
+        }
+
+        rdb.generateRequests = generateRequests;
+
+        return rdb;
+
+    }]);
+
+    app.service("rfp", ["rdb", "$q", function (rdb, $q) {
+        let i = 1;
+        return function () {
+            console.log("rfp call ",i++);
+            return $q.when(rdb.find());
+        }
+    }]);
+
     app.service("sql", ["$window", function ($window) {
         return $window.SQL;
     }]);
@@ -124,7 +178,7 @@
         return db;
     }]);
 
-    app.controller("VocabularyFilterController", ["$scope", "vcf", "DTOptionsBuilder", "DTColumnBuilder", "vfp", function ($scope, vcf, DTOptionsBuilder, DTColumnBuilder, vfp){
+    app.controller("VocabularyFilterController", ["$scope", "vcf", "DTOptionsBuilder", "DTColumnBuilder", "vfp", "vloki", function ($scope, vcf, DTOptionsBuilder, DTColumnBuilder, vfp){
         vcf.then(function (data) {
             angular.extend($scope, data);
             return data;
@@ -162,6 +216,18 @@
             $scope.db = $scope.db || {};
             $scope.db.tables = vsql.exec("SELECT name FROM sqlite_master WHERE type='table' ORDER BY name;")[0].values.map(function (value) { return value[0];});
         }
+    }]);
+
+    app.controller("RequestController", ["$scope", "rdb", "rfp", "DTOptionsBuilder", "DTColumnBuilder", function ($scope, rdb, rfp, DTOptionsBuilder, DTColumnBuilder) {
+        $scope.message = "Message";
+        $scope.tableInstance = {}
+        $scope.tableOptions = DTOptionsBuilder.fromFnPromise(rfp).withPaginationType('full_numbers');
+        $scope.columns = [
+            DTColumnBuilder.newColumn("description").withTitle("Description")
+        ]
+        rdb.generateRequests(10).then(function() {
+            $scope.tableInstance.changeData(rfp);
+        });
     }]);
 
     app.directive("chtnvs", function () {
