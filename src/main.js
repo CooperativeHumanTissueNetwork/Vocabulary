@@ -32,7 +32,7 @@
         "vcf",
         "vfp",
         "db",
-        "vloki",
+        "vdb",
         "rdb",
         "rfp",
     ]

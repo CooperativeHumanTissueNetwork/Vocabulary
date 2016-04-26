@@ -1,5 +1,5 @@
 module.exports = [
-    "$scope", "vcf", "DTOptionsBuilder", "DTColumnBuilder", "vfp", "vloki", function ($scope, vcf, DTOptionsBuilder, DTColumnBuilder, vfp){
+    "$scope", "vcf", "DTOptionsBuilder", "DTColumnBuilder", "vfp", "vdb", function ($scope, vcf, DTOptionsBuilder, DTColumnBuilder, vfp){
     vcf.then(function (data) {
         angular.extend($scope, data);
         return data;
