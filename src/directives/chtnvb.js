@@ -18,7 +18,6 @@ module.exports = ["vcf", function (vcf) {
                     evt.targetScope.dimension.filterAll();
                 }
                 scope.$evalAsync(updateModel);
-                evt.stopPropagation();
             });
 
             function updateModel() {

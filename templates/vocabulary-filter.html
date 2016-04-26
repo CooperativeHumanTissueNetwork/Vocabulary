@@ -1,22 +1,4 @@
 <h2>Selectors</h2>
-<div class="row">
-    <div class="col-sm-4">
-        <chtnvs label="Category" group="g.groupByCategory" dimension="d.byCategory"></chtnvs>
-    </div>
-    <div class="col-sm-4">
-        <chtnvs label="Anatomic Site" group="g.groupByAnatomicSite" dimension="d.byAnatomicSite"></chtnvs>
-    </div>
-    <div class="col-sm-4">
-        <chtnvs label="Subsite" group="g.groupBySubsite" dimension="d.bySubsite"></chtnvs>
-    </div>
-</div>
-<div class="row">
-    <div class="col-sm-6">
-        <chtnvs label="Diagnosis" group="g.groupByDiagnosis" dimension="d.byDiagnosis"></chtnvs>
-    </div>
-    <div class="col-sm-6">
-        <chtnvs label="Diagnosis Modifier" group="g.groupByDiagnosisModifier" dimension="d.byDiagnosisModifier"></chtnvs>
-    </div>
-</div>
+<chtnvb ng-model="annotationFilter"></chtnvb>
 <h2>Matching Rows</h2>
 <table datatable="" dt-options="tableOptions" dt-columns="columns" dt-instance="tableInstance" class="table table-bordered table-condensed table-hover"></table>

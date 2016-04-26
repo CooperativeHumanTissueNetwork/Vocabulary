@@ -1,15 +1,21 @@
 module.exports = [
-    "$scope", "vcf", "DTOptionsBuilder", "DTColumnBuilder", "vfp", "vdb", function ($scope, vcf, DTOptionsBuilder, DTColumnBuilder, vfp){
+    "$scope",
+    "vcf",
+    "DTOptionsBuilder",
+    "DTColumnBuilder",
+    "vfp",
+    "vdb",
+    "vSettings",
+    function ($scope, vcf, DTOptionsBuilder, DTColumnBuilder, vfp, vdb, vSettings) {
     vcf.then(function (data) {
         angular.extend($scope, data);
         return data;
     });
     $scope.tableInstance = {}
     $scope.tableOptions = DTOptionsBuilder.fromFnPromise(vfp).withPaginationType('full_numbers');
-    $scope.columns = displayFields.map(function (field) {
+    $scope.columns = vSettings.displayFields.map(function (field) {
         return DTColumnBuilder.newColumn(field).withTitle(field);
     });
-
     $scope.$on("chtnvs.changed", function (evt) {
         if (evt.targetScope.data.item) {
             evt.targetScope.dimension.filterExact(evt.targetScope.data.item);
@@ -19,5 +25,4 @@ module.exports = [
         evt.stopPropagation();
         $scope.tableInstance.changeData(vfp);
     });
-
 }]
