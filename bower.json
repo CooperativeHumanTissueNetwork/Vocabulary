@@ -27,6 +27,7 @@
     "dcjs": "dc.js#~2.0.0-beta.18",
     "select2": "~4.0.0",
     "sql.js": "*",
-    "ui-select": "angular-ui-select#~0.12.1"
+    "ui-select": "angular-ui-select#~0.12.1",
+    "angular-bootstrap": "angular-ui-bootstrap-bower#^1.3.2"
   }
 }

@@ -1,18 +1,24 @@
+<span class="pull-right">
+    <button class="btn btn-default" type="button" ng-click="hideRequestForm = !hideRequestForm">Add Request</button>
+</span>
 <h2>Requests</h2>
-<h4>Add Request</h4>
-<form name="requestAddForm" ng-submit="addRequest(newRequest)">
-    <div class="form-group">
-        <label>Description</label>
-        <input type="text" class="form-control" placeholder="Description" ng-model="newRequest.description">
-    </div>
-    <chtnvb ng-model="newRequest.annotation"></chtnvb>
-    <div class="row"><div class="col-sm-12">
-        <button type="submit" class="btn btn-default">Submit</button>
-        <button type="submit" class="btn btn-default" ng-click="newRequest = {}">Clear</button>
-    </div></div>
-</form>
-<br>
-<pre>{{newRequest | json}}</pre>
+
+<div id="add-request-form" uib-collapse="hideRequestForm">
+    <h4>Add Request</h4>
+    <form name="requestAddForm" ng-submit="addRequest(newRequest)">
+        <div class="form-group">
+            <label>Description</label>
+            <input type="text" class="form-control" placeholder="Description" ng-model="newRequest.description">
+        </div>
+        <chtnvb ng-model="newRequest.annotation"></chtnvb>
+        <div class="row"><div class="col-sm-12">
+            <button type="submit" class="btn btn-default">Submit</button>
+            <button type="submit" class="btn btn-default" ng-click="newRequest = {}">Clear</button>
+        </div></div>
+    </form>
+    <br>
+    <pre>{{newRequest | json}}</pre>
+</div>
 <hr>
 <h4>Request List</h4>
 <table datatable="" dt-options="tableOptions" dt-columns="columns" dt-instance="tableInstance" class="table table-bordered table-condensed table-hover"></table>

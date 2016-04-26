@@ -6,7 +6,8 @@
         "ngSanitize",
         "ui.select",
         "ui.router",
-        "ui.codemirror"]);
+        "ui.codemirror",
+        "ui.bootstrap"]);
 
 
     let vocabUrl = "CHTN-Core-Vocabulary.json"
